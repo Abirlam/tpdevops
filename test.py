@@ -1,25 +1,26 @@
-from flask import Flask
+import unittest
+from app import app
 
-app = Flask(__name__)
+# class de test
+class TestUnitaire(unittest.TestCase):
+    def setUp(self):
+        app.testing = True
+        self.app = app.test_client()
 
-@app.route('/')
+    # Tester la page d'accueil
+    def test_page_accueil(self):
+        rv = self.app.get('/')
+        self.assertEqual(rv.status, '200 OK')
 
-def hello():
+    # Tester la page de contact
+    def test_contact(self):
+        rv = self.app.get('/contact')
+        self.assertEqual(rv.status, '200 OK')
 
-    return 'Hello World!\n'
-
-
-
-# Route dynamique
-
-@app.route('/hello/<username>')
-
-def hello_user(username):
-
-    return 'Why Hello %s!\n' % username
-
-
+    # Tester la page a propos
+    def test_a_propos(self):
+        rv = self.app.get('/a-propos')
+        self.assertEqual(rv.status, '200 OK')
 
 if __name__ == '__main__':
-
-    app.run(host='0.0.0.0')
+    unittest.main()
